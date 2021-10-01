@@ -1,0 +1,283 @@
+---
+source: Rmd
+title: "Graphics with ggplot2"
+teaching: XX
+exercises: XX
+questions:
+- "How can I generate plots from tabular data in R?"
+objectives:
+- Make scatter plots and box plots to display your data.
+- Use aesthetics to change how variables map to axes, color, or size.
+keypoints:
+- "Although other plotting systems exist in R, ggplot2 is a good choice for beginners because it is very powerful and relatively user-friendly."
+- "Different components of the plot can be added together, much like layers in a Photoshop document."
+---
+
+```{r, include=FALSE}
+source("../bin/chunk-options.R")
+```
+
+## Setup
+
+### Dataset for this lesson
+
+If you don't already have it from the previous lesson, download the dataset from
+[Blackmore *et al.* (2017)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5544260/)
+and read it into R:
+
+```{r, eval = TRUE}
+if (!file.exists("data/rnaseq.csv"))
+    download.file(url = "https://raw.githubusercontent.com/UCLouvain-CBIO/WSBIM1207/scrnadata/data/rnaseq.csv",
+                  destfile = "data/rnaseq.csv")
+
+rna <- read.csv("data/rnaseq.csv")
+
+head(rna)
+```
+
+### Install and load ggplot2
+
+The default R installation does not include ggplot2, so you will need to install
+it if you haven't already:
+
+```{r, eval = FALSE}
+install.packages("ggplot2")
+```
+
+And then you'll load it with `library` in order to use it:
+
+```{r, eval = TRUE}
+library(ggplot2)
+```
+
+## Getting help
+
+The [website for ggplot2](https://ggplot2.tidyverse.org/) has a cheatsheet and
+other useful documentation.  This is a very popular R package, so Google and
+StackOverflow are also very helpful for getting answers!
+
+## Your first plots
+
+The base R installation has the `plot` function and some other functions
+for generating plots.  You can make a scatter plot or box plot pretty
+quickly this way, but it might not look very nice.
+
+```{r, eval = TRUE}
+plot(x = rna$time, y = log1p(rna$expression))
+```
+
+```{r, eval = TRUE}
+plot(x = as.factor(rna$infection), y = log1p(rna$expression))
+```
+
+I can make the same plots with ggplot2, and hopefully both the code and the
+graphics will look a bit better.  (Note that although the package is called
+ggplot2, the function is `ggplot`.)
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = time, y = log1p(expression))) +
+  geom_point()
+```
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = infection, y = log1p(expression))) +
+  geom_boxplot()
+```
+
+## Components of a ggplot command
+
+### Call to `ggplot`
+
+In both of the above plots, you'll notice that the first command we used was
+`ggplot`.  If you look at the help page for that function, you'll see that there
+are two arguments (or, at least, two arguments that can be used): `data` and
+`mapping`.  We gave the `data` argument our data frame.  What does this look like
+by itself?
+
+```{r, eval = TRUE}
+ggplot(rna)
+```
+
+It basically opened an empty plot, because we gave it data but didn't say anything
+about what to do with it.
+
+To the `mapping` argument, we supplied an object that we created using the `aes`
+function.  The `aes` function does not have any use outside of ggplot2, but within
+ggplot2 it indicates how the variables from the data frame should be used in
+the plot.  The function knows to look for variable names in the column names of
+the data frame that was supplied, which is very helpful.  What do we get when
+we add this in?
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = infection, y = log1p(expression)))
+```
+
+Now the axes are set up because we've said what we're putting onto them, but
+we still haven't plotted anything.
+
+### Geoms
+
+Now we need to add one or more "geoms" to the command to plot our data.
+Previously we added a bo xplot.  We could also do a violin plot, which is a hybrid
+between a box plot and density plot.
+
+Notice the use of the `+` sign to combine different commands.  That's pretty
+different from the syntax of any other R package, but it's how we do things with
+ggplot!
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = infection, y = log1p(expression))) +
+  geom_violin()
+```
+
+There can be multiple geoms in one plot.  The order matters, because they are
+plotted on top of each other.
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = infection, y = log1p(expression))) +
+  geom_violin() +
+  geom_point()
+```
+
+In these examples, we didn't provide any arguments to the geom functions.
+However, they have their own `data` and `mapping` arguments if you want to
+override what was provided in the `ggplot` function.
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = infection, y = log1p(expression))) +
+  geom_violin() +
+  geom_point(mapping = aes(y = log1p(expression) + 10))
+```
+
+A quick way to see what other geoms are available is to start typing
+`geom` into your R console and look at the autocomplete list.
+
+### More aesthetics
+
+If I look at `?geom_violin` and scroll down to the "Aesthetics" section, there
+is a list of other aesthetics I can control.  Although I have treatment on the
+x-axis, it might help visually to also color by treatment.  Since this only
+applies to one geom, I'll only pass it to that one.
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = infection, y = log1p(expression))) +
+  geom_violin(mapping = aes(fill = infection)) +
+  geom_point()
+```
+
+To change an aesthethic value across the board, rather than have it indicate the
+value of a variable, we can define it outside of the `mapping` argument.  For
+example, I can set `alpha` to control point transparency.
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = infection, y = log1p(expression))) +
+  geom_violin(mapping = aes(fill = infection)) +
+  geom_point(alpha = 0.01)
+```
+
+### Titles and axis labels
+
+You might want your plot to have a title, or for the axis labels to be something
+different from the variable names.  We'll use the `labs` function for that.
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = infection, y = log1p(expression))) +
+  geom_violin(mapping = aes(fill = infection)) +
+  geom_point(alpha = 0.01) +
+  labs(x = "Treatment", fill = "Treatment", y = "logCPM",
+       title = "Gene expression vs. viral infection")
+```
+
+### Facets
+
+When you are working with a lot of variables, it might make sense to split the
+graph into multiple plots.  We can do that with the `facet_wrap` and `facet_grid`
+functions.
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = infection, y = log1p(expression))) +
+  geom_violin(mapping = aes(fill = infection)) +
+  geom_point(alpha = 0.01) +
+  labs(x = "Treatment", fill = "Treatment", y = "logCPM",
+       title = "Gene expression vs. viral infection") +
+  facet_wrap(~ tissue)
+```
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = infection, y = log1p(expression))) +
+  geom_violin(mapping = aes(fill = infection)) +
+  geom_point(alpha = 0.01) +
+  labs(x = "Treatment", fill = "Treatment", y = "logCPM",
+       title = "Gene expression vs. viral infection") +
+  facet_grid(sex ~ tissue)
+```
+
+### Themes
+
+If you want to change something like grid lines or the angle of axis tick labels,
+you probably want to add a `theme` command.  There are some pre-build themes, for
+example:
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = infection, y = log1p(expression))) +
+  geom_violin(mapping = aes(fill = infection)) +
+  geom_point(alpha = 0.01) +
+  labs(x = "Treatment", fill = "Treatment", y = "logCPM",
+       title = "Gene expression vs. viral infection") +
+  facet_grid(sex ~ tissue) +
+  theme_bw()
+```
+
+If I just wanted to change the font:
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = infection, y = log1p(expression))) +
+  geom_violin(mapping = aes(fill = infection)) +
+  geom_point(alpha = 0.01) +
+  labs(x = "Treatment", fill = "Treatment", y = "logCPM",
+       title = "Gene expression vs. viral infection") +
+  facet_grid(sex ~ tissue) +
+  theme(text = element_text(family = "serif"))
+```
+
+Rotating axis labels:
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = infection, y = log1p(expression))) +
+  geom_violin(mapping = aes(fill = infection)) +
+  geom_point(alpha = 0.01) +
+  labs(x = "Treatment", fill = "Treatment", y = "logCPM",
+       title = "Gene expression vs. viral infection") +
+  facet_grid(sex ~ tissue) +
+  theme(text = element_text(family = "serif"),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+There are too many options here to unpack in a short lesson, but look
+at `?theme` and `?element_text` for more information.
+
+### Coordinate systems
+
+What if I want to rotate my plot 90 degrees?  I can do that with `coord_flip`.
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = infection, y = log1p(expression))) +
+  geom_violin(mapping = aes(fill = infection)) +
+  geom_point(alpha = 0.01) +
+  labs(x = "Treatment", fill = "Treatment", y = "logCPM",
+       title = "Gene expression vs. viral infection") +
+  facet_grid(sex ~ tissue) +
+  coord_flip()
+```
+
+### Scales
+
+I log-transformed my gene expression before plotting, but maybe I'd prefer
+to see it in the original units.  I can change how my y-axis is set up
+with `scale_y_continuous`.
+
+`scale_fill_manual`
+
+## Formatting your data for ggplot2
+
+Cover `pivot_longer` from the `tidyr` package
