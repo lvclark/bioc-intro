@@ -70,11 +70,11 @@ quickly this way, but it might not look very nice.
 > adds one before log transforming.
 {: .callout}
 
-```{r, eval = TRUE}
+```{r ggfig010, eval = TRUE}
 plot(x = rna$time, y = log1p(rna$expression))
 ```
 
-```{r, eval = TRUE}
+```{r ggfit020, eval = TRUE}
 plot(x = as.factor(rna$infection), y = log1p(rna$expression))
 ```
 
@@ -82,12 +82,12 @@ I can make the same plots with ggplot2, and hopefully both the code and the
 graphics will look a bit better.  (Note that although the package is called
 ggplot2, the function is `ggplot`.)
 
-```{r, eval = TRUE}
+```{r ggfig030, eval = TRUE}
 ggplot(rna, aes(x = time, y = log1p(expression))) +
   geom_point()
 ```
 
-```{r, eval = TRUE}
+```{r ggfig040, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_boxplot()
 ```
@@ -102,7 +102,7 @@ are two arguments (or, at least, two arguments that can be used): `data` and
 `mapping`.  We gave the `data` argument our data frame.  What does this look like
 by itself?
 
-```{r, eval = TRUE}
+```{r ggfig050, eval = TRUE}
 ggplot(rna)
 ```
 
@@ -116,7 +116,7 @@ the plot.  The function knows to look for variable names in the column names of
 the data frame that was supplied, which is very helpful.  What do we get when
 we add this in?
 
-```{r, eval = TRUE}
+```{r ggfig060, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression)))
 ```
 
@@ -133,14 +133,14 @@ Notice the use of the `+` sign to combine different commands.  That's pretty
 different from the syntax of any other R package, but it's how we do things with
 ggplot!
 
-```{r, eval = TRUE}
+```{r ggfig070, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_violin()
 ```
 
 There can be multiple geoms in one plot.
 
-```{r, eval = TRUE}
+```{r ggfig080, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_violin() +
   geom_point()
@@ -151,12 +151,12 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
 > Try switching `geom_point` with `geom_violin` in the above command, so that
 > `geom_point` is first and `geom_violin` is second.  What happens?
 >
-> > # Solution
+> > ## Solution
 > > 
 > > Most of the points are no longer visible, because they are now underneath
 > > the violin plot.  Geoms are plotted in the order they appear in the command.
 > >
-> > ```{r, eval = TRUE}
+> > ```{r ggfig090, eval = TRUE}
 > > ggplot(rna, aes(x = infection, y = log1p(expression))) +
 > >   geom_point() +
 > >   geom_violin()
@@ -168,7 +168,7 @@ In these examples, we didn't provide any arguments to the geom functions.
 However, they have their own `data` and `mapping` arguments if you want to
 override what was provided in the `ggplot` function.
 
-```{r, eval = TRUE}
+```{r ggfig100, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_violin() +
   geom_point(mapping = aes(y = log1p(expression) + 10))
@@ -180,11 +180,11 @@ A quick way to see what other geoms are available is to start typing
 ### More aesthetics
 
 If I look at `?geom_violin` and scroll down to the "Aesthetics" section, there
-is a list of other aesthetics I can control.  Although I have treatment on the
+is a list of other aesthetics we can control.  Although I have treatment on the
 x-axis, it might help visually to also color by treatment.  Since this only
 applies to one geom, I'll only pass it to that one.
 
-```{r, eval = TRUE}
+```{r ggfig110, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_violin(mapping = aes(fill = infection)) +
   geom_point()
@@ -194,7 +194,7 @@ To change an aesthethic value across the board, rather than have it indicate the
 value of a variable, we can define it outside of the `mapping` argument.  For
 example, I can set `alpha` to control point transparency.
 
-```{r, eval = TRUE}
+```{r ggfig120, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_violin(mapping = aes(fill = infection)) +
   geom_point(alpha = 0.01)
@@ -205,7 +205,7 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
 You might want your plot to have a title, or for the axis labels to be something
 different from the variable names.  We'll use the `labs` function for that.
 
-```{r, eval = TRUE}
+```{r ggfig130, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_violin(mapping = aes(fill = infection)) +
   geom_point(alpha = 0.01) +
@@ -219,7 +219,7 @@ When you are working with a lot of variables, it might make sense to split the
 graph into multiple plots.  We can do that with the `facet_wrap` and `facet_grid`
 functions.
 
-```{r, eval = TRUE}
+```{r ggfig140, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_violin(mapping = aes(fill = infection)) +
   geom_point(alpha = 0.01) +
@@ -228,7 +228,7 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   facet_wrap(~ tissue)
 ```
 
-```{r, eval = TRUE}
+```{r ggfig150, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_violin(mapping = aes(fill = infection)) +
   geom_point(alpha = 0.01) +
@@ -245,7 +245,7 @@ with `scale_y_continuous`.  The `trans` argument says how I want to transform
 the axis, and the `breaks` argument tells it where to put axis ticks and grid
 lines.
 
-```{r, eval = TRUE}
+```{r ggfig160, eval = TRUE}
 ggplot(rna, aes(x = infection, y = expression)) +
   geom_violin(mapping = aes(fill = infection)) +
   geom_point(alpha = 0.01) +
@@ -264,13 +264,13 @@ ggplot(rna, aes(x = infection, y = expression)) +
 > like `"green"` and `"blue"`.
 > 
 > If you have extra time, you can play around with color names from
-> http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf.
-> You can also use a tool like https://www.w3schools.com/colors/colors_picker.asp
+> [this list](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf).
+> You can also use a [color picker](https://www.w3schools.com/colors/colors_picker.asp)
 > to generate custom color strings like `#4d94ff`
 >
 > > ## Solution
 > >
-> > ```{r, eval = TRUE}
+> > ```{r ggfig170, eval = TRUE}
 > > ggplot(rna, aes(x = infection, y = expression)) +
 > >  geom_violin(mapping = aes(fill = infection)) +
 > >  geom_point(alpha = 0.01) +
@@ -291,7 +291,7 @@ If you want to change something like grid lines or the angle of axis tick labels
 you probably want to add a `theme` command.  There are some pre-build themes, for
 example:
 
-```{r, eval = TRUE}
+```{r ggfig180, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_violin(mapping = aes(fill = infection)) +
   geom_point(alpha = 0.01) +
@@ -303,7 +303,7 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
 
 If I just wanted to change the font:
 
-```{r, eval = TRUE}
+```{r ggfig190, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_violin(mapping = aes(fill = infection)) +
   geom_point(alpha = 0.01) +
@@ -315,7 +315,7 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
 
 Rotating axis labels:
 
-```{r, eval = TRUE}
+```{r ggfig200, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_violin(mapping = aes(fill = infection)) +
   geom_point(alpha = 0.01) +
@@ -333,7 +333,7 @@ at `?theme` and `?element_text` for more information.
 
 What if I want to rotate my plot 90 degrees?  I can do that with `coord_flip`.
 
-```{r, eval = TRUE}
+```{r ggfig210, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_violin(mapping = aes(fill = infection)) +
   geom_point(alpha = 0.01) +
@@ -355,7 +355,7 @@ Say I only wanted to look at expression of the _Swt1_ gene. I could filter the
 data frame in the "base R" fashion (note that I am putting `alpha` back to the
 default since I have far fewer points now):
 
-```{r, eval = TRUE}
+```{r ggfig220, eval = TRUE}
 ggplot(rna[rna$gene == "Swt1",], aes(x = infection, y = log1p(expression))) +
   geom_violin(mapping = aes(fill = infection)) +
   geom_point() +
@@ -371,7 +371,7 @@ to keep certain rows.  We'll also use the pipe command `%>%` (originally from
 the magrittr package) to send output of one expression as input to the next
 function so we don't have to nest functions so much.
 
-```{r, eval = TRUE}
+```{r ggfig230, eval = TRUE}
 library(dplyr)
 
 rna %>%
@@ -404,15 +404,15 @@ head(rna_wider)
 ```
 
 The output is a `tibble`, which is really just the tidyverse version of a data frame.
-Anyway, now we can make a plot like this one to compare each gene across two samples.
+Anyway, now we can make a plot like the one below to compare each gene across two samples.
 
-```{r, eval = TRUE}
+```{r ggfig240, eval = TRUE}
 ggplot(rna_wider, aes(x = log1p(GSM2545336), y = log1p(GSM2545337))) +
   geom_point()
 ```
 
 If I had started with a data frame set up like `rna_wider` and wanted it in long
-format, I could do the opposite operation.
+format, I could do the opposite operation using `pivot_longer`.
 
 > ## Selecting columns
 >
@@ -440,7 +440,7 @@ head(metadata)
 We could then use `left_join` from the `dplyr` package to recreate the original
 dataset.
 
-```{r, eval = TRUE}
+```{r ggfig250, eval = TRUE}
 rna_orig <- left_join(rna_longer, metadata, by = "sample")
 head(rna_orig)
 
