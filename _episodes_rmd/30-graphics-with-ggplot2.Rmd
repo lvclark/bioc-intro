@@ -74,7 +74,7 @@ quickly this way, but it might not look very nice.
 plot(x = rna$time, y = log1p(rna$expression))
 ```
 
-```{r ggfit020, eval = TRUE}
+```{r ggfig020, eval = TRUE}
 plot(x = as.factor(rna$infection), y = log1p(rna$expression))
 ```
 
