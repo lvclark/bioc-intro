@@ -54,13 +54,21 @@ library(ggplot2)
 
 The [website for ggplot2](https://ggplot2.tidyverse.org/) has a cheatsheet and
 other useful documentation.  This is a very popular R package, so Google and
-StackOverflow are also very helpful for getting answers!
+Stack Overflow are also very helpful for getting answers!
 
 ## Your first plots
 
 The base R installation has the `plot` function and some other functions
 for generating plots.  You can make a scatter plot or box plot pretty
 quickly this way, but it might not look very nice.
+
+> ## Data transformation
+> 
+> Because the gene expression data are not normally distributed, here we are
+> using the `log1p` function to log transform them.  Because the log of zero
+> is negative infinity, and because we have zeros in our dataset, `log1p`
+> adds one before log transforming.
+{: .callout}
 
 ```{r, eval = TRUE}
 plot(x = rna$time, y = log1p(rna$expression))
@@ -118,7 +126,7 @@ we still haven't plotted anything.
 ### Geoms
 
 Now we need to add one or more "geoms" to the command to plot our data.
-Previously we added a bo xplot.  We could also do a violin plot, which is a hybrid
+Previously we added a box plot.  We could also do a violin plot, which is a hybrid
 between a box plot and density plot.
 
 Notice the use of the `+` sign to combine different commands.  That's pretty
@@ -130,14 +138,31 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_violin()
 ```
 
-There can be multiple geoms in one plot.  The order matters, because they are
-plotted on top of each other.
+There can be multiple geoms in one plot.
 
 ```{r, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_violin() +
   geom_point()
 ```
+
+> ## Challenge: Changing the geom order
+>
+> Try switching `geom_point` with `geom_violin` in the above command, so that
+> `geom_point` is first and `geom_violin` is second.  What happens?
+>
+> > # Solution
+> > 
+> > Most of the points are no longer visible, because they are now underneath
+> > the violin plot.  Geoms are plotted in the order they appear in the command.
+> >
+> > ```{r, eval = TRUE}
+> > ggplot(rna, aes(x = infection, y = log1p(expression))) +
+> >   geom_point() +
+> >   geom_violin()
+> > ```
+> {: .solution}
+{: .challenge}
 
 In these examples, we didn't provide any arguments to the geom functions.
 However, they have their own `data` and `mapping` arguments if you want to
@@ -212,6 +237,54 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   facet_grid(sex ~ tissue)
 ```
 
+### Scales
+
+I log-transformed my gene expression before plotting, but maybe I'd prefer
+to see it in the original units.  I can change how my y-axis is set up
+with `scale_y_continuous`.  The `trans` argument says how I want to transform
+the axis, and the `breaks` argument tells it where to put axis ticks and grid
+lines.
+
+```{r, eval = TRUE}
+ggplot(rna, aes(x = infection, y = expression)) +
+  geom_violin(mapping = aes(fill = infection)) +
+  geom_point(alpha = 0.01) +
+  labs(x = "Treatment", fill = "Treatment", y = "Expression",
+       title = "Gene expression vs. viral infection") +
+  facet_grid(sex ~ tissue) +
+  scale_y_continuous(trans = "log1p",
+                     breaks = c(0, 1e2, 1e3, 1e4, 1e5, 1e6))
+```
+
+> ## Challenge: Changing the fill colors
+>
+> I'd like the violin plots to be filled with something other than the default
+> salmon and teal.  Look at the help page for `scale_fill_manual` and see if
+> you can figure out how to use it.  You can specify colors with simple strings
+> like `"green"` and `"blue"`.
+> 
+> If you have extra time, you can play around with color names from
+> http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf.
+> You can also use a tool like https://www.w3schools.com/colors/colors_picker.asp
+> to generate custom color strings like `#4d94ff`
+>
+> > ## Solution
+> >
+> > ```{r, eval = TRUE}
+> > ggplot(rna, aes(x = infection, y = expression)) +
+> >  geom_violin(mapping = aes(fill = infection)) +
+> >  geom_point(alpha = 0.01) +
+> >  labs(x = "Treatment", fill = "Treatment", y = "Expression",
+> >       title = "Gene expression vs. viral infection") +
+> >  facet_grid(sex ~ tissue) +
+> >  scale_y_continuous(trans = "log1p",
+> >                     breaks = c(0, 1e2, 1e3, 1e4, 1e5, 1e6)) +
+> >  scale_fill_manual(values = c(InfluenzaA = "darkolivegreen4",
+> >                               NonInfected = "royalblue"))
+> > ```
+> {: .solution}
+{: .challenge}
+
 ### Themes
 
 If you want to change something like grid lines or the angle of axis tick labels,
@@ -270,14 +343,112 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   coord_flip()
 ```
 
-### Scales
+## Using other tidyverse packages with ggplot2
 
-I log-transformed my gene expression before plotting, but maybe I'd prefer
-to see it in the original units.  I can change how my y-axis is set up
-with `scale_y_continuous`.
+The tidyverse is a group of R packages that are designed to work together to make
+data science easier for everyone.  Here are a couple examples of handy functions
+to use with ggplot2.
 
-`scale_fill_manual`
+### dplyr
 
-## Formatting your data for ggplot2
+Say I only wanted to look at expression of the _Swt1_ gene. I could filter the
+data frame in the "base R" fashion (note that I am putting `alpha` back to the
+default since I have far fewer points now):
 
-Cover `pivot_longer` from the `tidyr` package
+```{r, eval = TRUE}
+ggplot(rna[rna$gene == "Swt1",], aes(x = infection, y = log1p(expression))) +
+  geom_violin(mapping = aes(fill = infection)) +
+  geom_point() +
+  labs(x = "Treatment", fill = "Treatment", y = "logCPM",
+       title = "Gene expression vs. viral infection") +
+  facet_grid(sex ~ tissue)
+```
+
+The [dplyr](https://dplyr.tidyverse.org/) package has a lot of functions for
+data frame manipulation, and can be used to make a slightly more readable
+version of the above command.  The `filter` function is helpful if you only want
+to keep certain rows.  We'll also use the pipe command `%>%` (originally from
+the magrittr package) to send output of one expression as input to the next
+function so we don't have to nest functions so much.
+
+```{r, eval = TRUE}
+library(dplyr)
+
+rna %>%
+  filter(gene == "Swt1") %>%
+  ggplot(mapping = aes(x = infection, y = log1p(expression))) +
+  geom_violin(mapping = aes(fill = infection)) +
+  geom_point() +
+  labs(x = "Treatment", fill = "Treatment", y = "logCPM",
+       title = "Gene expression vs. viral infection") +
+  facet_grid(sex ~ tissue)
+```
+
+### tidyr
+
+The [tidyr](https://raw.githubusercontent.com/rstudio/cheatsheets/master/tidyr.pdf) R package
+can help you clean up and arrange your data.  In particular, I often find myself
+in a situation where I imported something as multiple columns that needs to be
+a single column, or vice versa.  The `pivot_longer` and `pivot_wider` functions
+are helpful in those cases.
+
+Say I want to have a separate gene expression column for each sample.
+
+```{r, eval = TRUE}
+library(tidyr)
+
+rna_wider <- pivot_wider(rna[,c("gene", "sample", "expression")],
+                         names_from = sample, values_from = expression)
+
+head(rna_wider)
+```
+
+The output is a `tibble`, which is really just the tidyverse version of a data frame.
+Anyway, now we can make a plot like this one to compare each gene across two samples.
+
+```{r, eval = TRUE}
+ggplot(rna_wider, aes(x = log1p(GSM2545336), y = log1p(GSM2545337))) +
+  geom_point()
+```
+
+If I had started with a data frame set up like `rna_wider` and wanted it in long
+format, I could do the opposite operation.
+
+> ## Selecting columns
+>
+> See `?tidyr_tidy_select` for methods to select columns in the tidyverse,
+> including `starts_with`.
+{: .callout}
+
+```{r, eval = TRUE}
+rna_longer <- pivot_longer(rna_wider, cols = starts_with("GSM"),
+                           names_to = "sample", values_to = "expression")
+
+head(rna_longer)
+```
+
+All the sample metadata are missing from `rna_longer`, however.  I'll build a
+metadata table here from the original, although you could have hypothetically
+imported such metadata from a CSV.
+
+```{r, eval = TRUE}
+metadata <- rna[,c("sample", "sex", "infection", "time", "tissue", "mouse")]
+metadata <- metadata[!duplicated(metadata),]
+head(metadata)
+```
+
+We could then use `left_join` from the `dplyr` package to recreate the original
+dataset.
+
+```{r, eval = TRUE}
+rna_orig <- left_join(rna_longer, metadata, by = "sample")
+head(rna_orig)
+
+ggplot(rna_orig, aes(x = infection, y = log1p(expression))) +
+  geom_violin(mapping = aes(fill = infection)) +
+  geom_point(alpha = 0.01) +
+  labs(x = "Treatment", fill = "Treatment", y = "logCPM",
+       title = "Gene expression vs. viral infection") +
+  facet_grid(sex ~ tissue)
+```
+
