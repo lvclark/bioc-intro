@@ -185,8 +185,8 @@ break. Go through the steps for creating an "R Project" for this
 tutorial below.
 
 1. Start RStudio.
-2. Under the `File` menu, click on `New project`. Choose `New directory`, then
-  `New project`.
+2. Under the `File` menu, click on `New Project`. Choose `New Directory`, then
+  `New Project`.
 3. Enter a name for this new folder (or "directory"), and choose a
    convenient location for it. This will be your **working directory**
    for this session (or whole course) (e.g., `wsbim1207`).
@@ -259,7 +259,7 @@ CSV files, and `fig_output/` folder for the figures that we will save.
 
 We are going to keep the script in the root of our working directory
 because we are only going to use one file and it will make things
-easier.
+easier. Under the `File` menu, click on `New File` then `R script`. This will open the 4th pane in the top left. Under the `File` menu again, click on `Save` and name the file "script.R".
 
 Your working directory should now look like this:
 
