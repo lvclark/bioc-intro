@@ -248,7 +248,7 @@ doing.
 # Vectors and data types
 
 A vector is the most common and basic data type in R, and is pretty much
-the workhorse of R. A vector is composed by a series of values, which can be
+the workhorse of R. A vector is composed by a series of values, which are usually
 either numbers or characters. We can assign a series of values to a vector using
 the `c()` function. For example we can create a vector of animal weights and assign
 it to a new object `weight_g`:
@@ -338,19 +338,8 @@ important ones are lists (`list`), matrices (`matrix`), data frames
 >
 > We've seen that atomic vectors can be of type character, numeric (or
 > double), integer, and logical. But what happens if we try to mix
-> these types in a single vector?
->
-> > ## Solution
-> >
-> > R implicitly converts them to all be the same type
-> {: .solution}
-{: .challenge}
-
-
-> ## Challenge:
->
-> What will happen in each of these examples? (hint: use `class()` to
-> check the data type of your objects):
+> these types in a single vector? Try each of these examples (hint: use
+> `class()` tocheck the data type of your objects):
 >
 > ```{r, eval=TRUE}
 > num_char <- c(1, 2, 3, "a")
@@ -358,27 +347,13 @@ important ones are lists (`list`), matrices (`matrix`), data frames
 > char_logical <- c("a", "b", "c", TRUE)
 > tricky <- c(1, 2, 3, "4")
 > ```
-> > Solution
+> > ## Solution
 > >
-> > ```{r}
-> > class(num_char)
-> > class(num_logical)
-> > class(char_logical)
-> > class(tricky)
-> > ```
+> > R implicitly converts them to all be the same type
 > {: .solution}
 {: .challenge}
 
 
-> ## Challenge:
->
-> Why do you think it happens?
-> > Solution
-> > Vectors can be of only one data type. R tries to convert (coerce)
-> > the content of this vector to find a *common denominator* that
-> > doesn't lose any information.
-> {: .solution}
-{: .challenge}
 
 
 > ## Challenge:
@@ -404,17 +379,6 @@ important ones are lists (`list`), matrices (`matrix`), data frames
 {: .challenge}
 
 
-> ## Challenge:
->
-> In R, we call converting objects from one class into another class
-> _coercion_. These conversions happen according to a hierarchy,
-> whereby some types get preferentially coerced into other types. Can
-> you draw a diagram that represents the hierarchy of how these data
-> types are coerced?
-> > Solution
-> > logical &#8594; numeric &#8594; character &#8592; logical
-> {: .solution}
-{: .challenge}
 
 
 ```{r, echo=FALSE, eval=FALSE, purl=TRUE}
@@ -519,7 +483,7 @@ this can quickly become tedious. The function `%in%` allows you to
 test if any of the elements of a search vector are found:
 
 ```{r, purl = FALSE}
-molecules <- c("dan", "rna", "protein", "peptide")
+molecules <- c("dna", "rna", "protein", "peptide")
 molecules[molecules == "rna" | molecules == "dna"] # returns both rna and dna
 molecules %in% c("rna", "dna", "metabolite", "peptide", "glycerol")
 molecules[molecules %in% c("rna", "dna", "metabolite", "peptide", "glycerol")]
