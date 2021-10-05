@@ -86,13 +86,15 @@ first. You can install the
 [**`lintr`**](https://github.com/jimhester/lintr) package to
 automatically check for issues in the styling of your code.
 
-> **Objects vs. variables** What are known as `objects` in `R` are
+> ## Objects vs. variables
+>
+> What are known as `objects` in `R` are
 > known as `variables` in many other programming languages. Depending
 > on the context, `object` and `variable` can have drastically
 > different meanings. However, in this lesson, the two words are used
 > synonymously. For more information see:
 > https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Objects
-
+{: .callout}
 
 When assigning a value to an object, R does not print anything. You
 can force R to print the value by using parentheses or by typing the
@@ -372,7 +374,8 @@ important ones are lists (`list`), matrices (`matrix`), data frames
 > > happens the first time the vector is evaluated. Therefore, the `TRUE`
 > > in `num_logical` gets converted into a `1` before it gets converted
 > > into `"1"` in `combined_logical`.
-> >```{r}
+> >
+> > ```{r}
 > > combined_logical
 > > ```
 > {: .solution}
@@ -744,11 +747,10 @@ sample(1:5, 10, replace = TRUE)
 > - Test this feature with your neighbour. First draw two random
 >   permutations of `1:10` independently and observe that you get
 >   different results.
->
 > - Now set the seed with, for example, `set.seed(123)` and repeat the
 >   random draw. Observe that you now get the same random draws.
->
 > - Repeat by setting a different seed.
+>
 > > ## Solution
 > > Different permutations
 > >
