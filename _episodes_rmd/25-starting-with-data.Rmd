@@ -266,15 +266,15 @@ correct names of the columns.
 >
 > 2. Notice how `nrow()` gave you the number of rows in a `data.frame`?
 >
-> - Use that number to pull out just that last row in the inital
->   `rna` data frame.
+>     - Use that number to pull out just that last row in the inital
+>       `rna` data frame.
 >
-> - Compare that with what you see as the last row using `tail()` to
->   make sure it's meeting expectations.
+>     - Compare that with what you see as the last row using `tail()` to
+>       make sure it's meeting expectations.
 >
-> - Pull out that last row using `nrow()` instead of the row number.
+>     - Pull out that last row using `nrow()` instead of the row number.
 >
-> - Create a new data frame (`rna_last`) from that last row.
+>     - Create a new data frame (`rna_last`) from that last row.
 >
 > 3. Use `nrow()` to extract the row that is in the middle of the
 >    `rna` dataframe. Store the content of this row in an object
@@ -298,7 +298,7 @@ correct names of the columns.
 > > ## 4.
 > > rna_head <- rna[-(7:n_rows), ]
 > > ```
-> > {: .solution}
+> {: .solution}
 {: .challenge}
 
 
