@@ -52,7 +52,9 @@ columns represent:
 | strain     | The Influenza A strain; C57BL/6 in all cases.                                                |
 | time       | The duration of the infection (in days).                                                     |
 | tissue     | The tissue that was used for the gene expression experiment, i.e. cerebellum or spinal cord. |
-| mouse      | The mouse unique identifier.                                                                 |
+| mouse      | The mouse unique identifier.  
+| +8 columns | extra gene annotation
+ |
 
 We are going to use the R function `download.file()` to download the
 CSV file that contains the gene expression data, and we will use
@@ -141,8 +143,6 @@ columns are vectors, each column must contain a single type of data
 (e.g., characters, integers, factors). For example, here is a figure
 depicting a data frame comprising a numeric, a character, and a
 logical vector.
-
-![](./figs/data-frame.svg)
 
 
 We can see this when inspecting the <b>str</b>ucture of a data frame
@@ -394,7 +394,7 @@ and females in our data.
 plot(sex)
 ```
 
-If we want to rename these factor, it is sufficient to change its
+If we want to rename these factors, it is sufficient to change its
 levels:
 
 ```{r}
@@ -489,28 +489,7 @@ one can be deduced from the length of the values. Try out what happens
 if the values and number of rows/columns don't add up.
 
 
-> ## Challenge:
->
-> Using the function `installed.packages()`, create a `character` matrix
-> containing the information about all packages currently installed on
-> your computer. Explore it.
->
-> > Solution:
-> >
-> > ```{r pkg_sln, eval = FALSE}
-> > ## create the matrix
-> > ip <- installed.packages()
-> > head(ip)
-> > ## try also View(ip)
-> > ## number of package
-> > nrow(ip)
-> > ## names of all installed packages
-> > rownames(ip)
-> > ## type of information we have about each package
-> > colnames(ip)
-> > ```
-> {: .solution}
-{: .challenge}
+
 
 It is often useful to create large random data matrices as test
 data. The exercise below asks you to create such a matrix with random
