@@ -52,7 +52,9 @@ columns represent:
 | strain     | The Influenza A strain; C57BL/6 in all cases.                                                |
 | time       | The duration of the infection (in days).                                                     |
 | tissue     | The tissue that was used for the gene expression experiment, i.e. cerebellum or spinal cord. |
-| mouse      | The mouse unique identifier.                                                                 |
+| mouse      | The mouse unique identifier.  
+| +8 columns | extra gene annotation
+ |
 
 We are going to use the R function `download.file()` to download the
 CSV file that contains the gene expression data, and we will use
@@ -176,8 +178,6 @@ columns are vectors, each column must contain a single type of data
 (e.g., characters, integers, factors). For example, here is a figure
 depicting a data frame comprising a numeric, a character, and a
 logical vector.
-
-![](./figs/data-frame.svg)
 
 
 We can see this when inspecting the <b>str</b>ucture of a data frame
@@ -327,15 +327,15 @@ correct names of the columns.
 >
 > 2. Notice how `nrow()` gave you the number of rows in a `data.frame`?
 >
-> - Use that number to pull out just that last row in the inital
->   `rna` data frame.
+>     - Use that number to pull out just that last row in the inital
+>       `rna` data frame.
 >
-> - Compare that with what you see as the last row using `tail()` to
->   make sure it's meeting expectations.
+>     - Compare that with what you see as the last row using `tail()` to
+>       make sure it's meeting expectations.
 >
-> - Pull out that last row using `nrow()` instead of the row number.
+>     - Pull out that last row using `nrow()` instead of the row number.
 >
-> - Create a new data frame (`rna_last`) from that last row.
+>     - Create a new data frame (`rna_last`) from that last row.
 >
 > 3. Use `nrow()` to extract the row that is in the middle of the
 >    `rna` dataframe. Store the content of this row in an object
@@ -361,7 +361,7 @@ correct names of the columns.
 > > rna_head <- rna[-(7:n_rows), ]
 > > ~~~
 > > {: .language-r}
-> > {: .solution}
+> {: .solution}
 {: .challenge}
 
 
@@ -518,7 +518,7 @@ plot(sex)
 
 <img src="../fig/rmd-firstfactorplot-1.png" title="Bar plot of the number of females and males." alt="Bar plot of the number of females and males." width="612" style="display: block; margin: auto;" />
 
-If we want to rename these factor, it is sufficient to change its
+If we want to rename these factors, it is sufficient to change its
 levels:
 
 
@@ -578,7 +578,7 @@ plot(sex)
 >        weight = c(45, 8 1.1, 0.8))
 > ~~~
 > {: .language-r}
-> > Solution
+> > ## Solution
 > >
 > > - missing quotations around the names of the animals
 > > - missing one entry in the "feel" column (probably for one of the furry animals)
@@ -660,30 +660,7 @@ one can be deduced from the length of the values. Try out what happens
 if the values and number of rows/columns don't add up.
 
 
-> ## Challenge:
->
-> Using the function `installed.packages()`, create a `character` matrix
-> containing the information about all packages currently installed on
-> your computer. Explore it.
->
-> > Solution:
-> >
-> > 
-> > ~~~
-> > ## create the matrix
-> > ip <- installed.packages()
-> > head(ip)
-> > ## try also View(ip)
-> > ## number of package
-> > nrow(ip)
-> > ## names of all installed packages
-> > rownames(ip)
-> > ## type of information we have about each package
-> > colnames(ip)
-> > ~~~
-> > {: .language-r}
-> {: .solution}
-{: .challenge}
+
 
 It is often useful to create large random data matrices as test
 data. The exercise below asks you to create such a matrix with random
@@ -696,7 +673,7 @@ data drawn from a normal distribution of mean 0 and standard deviation
 > Construct a matrix of dimension 1000 by 3 of normally distributed data
 > (mean 0, standard deviation 1)
 >
-> > Solution
+> > ## Solution
 > >
 > > 
 > > ~~~
@@ -1000,9 +977,9 @@ str(l)
 List of 5
  $ : int [1:10] 1 2 3 4 5 6 7 8 9 10
  $ : chr [1:26] "a" "b" "c" "d" ...
- $ : chr [1:59, 1:16] "base64enc" "BiocManager" "BiocVersion" "crayon" ...
+ $ : chr [1:196, 1:16] "ade4" "adegenet" "AnnotationDbi" "ape" ...
   ..- attr(*, "dimnames")=List of 2
-  .. ..$ : chr [1:59] "base64enc" "BiocManager" "BiocVersion" "crayon" ...
+  .. ..$ : chr [1:196] "ade4" "adegenet" "AnnotationDbi" "ape" ...
   .. ..$ : chr [1:16] "Package" "LibPath" "Version" "Priority" ...
  $ :'data.frame':	50 obs. of  2 variables:
   ..$ speed: num [1:50] 4 4 7 7 8 9 10 10 10 11 ...

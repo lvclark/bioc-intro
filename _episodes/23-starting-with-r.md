@@ -110,13 +110,15 @@ first. You can install the
 [**`lintr`**](https://github.com/jimhester/lintr) package to
 automatically check for issues in the styling of your code.
 
-> **Objects vs. variables** What are known as `objects` in `R` are
+> ## Objects vs. variables
+>
+> What are known as `objects` in `R` are
 > known as `variables` in many other programming languages. Depending
 > on the context, `object` and `variable` can have drastically
 > different meanings. However, in this lesson, the two words are used
 > synonymously. For more information see:
 > https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Objects
-
+{: .callout}
 
 When assigning a value to an object, R does not print anything. You
 can force R to print the value by using parentheses or by typing the
@@ -368,7 +370,7 @@ doing.
 # Vectors and data types
 
 A vector is the most common and basic data type in R, and is pretty much
-the workhorse of R. A vector is composed by a series of values, which can be
+the workhorse of R. A vector is composed by a series of values, which are usually
 either numbers or characters. We can assign a series of values to a vector using
 the `c()` function. For example we can create a vector of animal weights and assign
 it to a new object `weight_g`:
@@ -551,19 +553,8 @@ important ones are lists (`list`), matrices (`matrix`), data frames
 >
 > We've seen that atomic vectors can be of type character, numeric (or
 > double), integer, and logical. But what happens if we try to mix
-> these types in a single vector?
->
-> > ## Solution
-> >
-> > R implicitly converts them to all be the same type
-> {: .solution}
-{: .challenge}
-
-
-> ## Challenge:
->
-> What will happen in each of these examples? (hint: use `class()` to
-> check the data type of your objects):
+> these types in a single vector? Try each of these examples (hint: use
+> `class()` tocheck the data type of your objects):
 >
 > 
 > ~~~
@@ -573,75 +564,13 @@ important ones are lists (`list`), matrices (`matrix`), data frames
 > tricky <- c(1, 2, 3, "4")
 > ~~~
 > {: .language-r}
-> > Solution
+> > ## Solution
 > >
-> > 
-> > ~~~
-> > class(num_char)
-> > ~~~
-> > {: .language-r}
-> > 
-> > 
-> > 
-> > ~~~
-> > [1] "character"
-> > ~~~
-> > {: .output}
-> > 
-> > 
-> > 
-> > ~~~
-> > class(num_logical)
-> > ~~~
-> > {: .language-r}
-> > 
-> > 
-> > 
-> > ~~~
-> > [1] "numeric"
-> > ~~~
-> > {: .output}
-> > 
-> > 
-> > 
-> > ~~~
-> > class(char_logical)
-> > ~~~
-> > {: .language-r}
-> > 
-> > 
-> > 
-> > ~~~
-> > [1] "character"
-> > ~~~
-> > {: .output}
-> > 
-> > 
-> > 
-> > ~~~
-> > class(tricky)
-> > ~~~
-> > {: .language-r}
-> > 
-> > 
-> > 
-> > ~~~
-> > [1] "character"
-> > ~~~
-> > {: .output}
+> > R implicitly converts them to all be the same type
 > {: .solution}
 {: .challenge}
 
 
-> ## Challenge:
->
-> Why do you think it happens?
-> > Solution
-> > Vectors can be of only one data type. R tries to convert (coerce)
-> > the content of this vector to find a *common denominator* that
-> > doesn't lose any information.
-> {: .solution}
-{: .challenge}
 
 
 > ## Challenge:
@@ -656,39 +585,29 @@ important ones are lists (`list`), matrices (`matrix`), data frames
 > combined_logical <- c(num_logical, char_logical)
 > ~~~
 > {: .language-r}
-> > Solution
+> > ## Solution
 > >
 > > Only one. There is no memory of past data types, and the coercion
 > > happens the first time the vector is evaluated. Therefore, the `TRUE`
 > > in `num_logical` gets converted into a `1` before it gets converted
 > > into `"1"` in `combined_logical`.
 > >
-> >~~~
+> > 
+> > ~~~
 > > combined_logical
-> >~~~
-> >{: .language-r}
-> >
-> >
-> >
-> >~~~
-> >[1] "1"    "2"    "3"    "1"    "a"    "b"    "c"    "TRUE"
-> >~~~
-> >{: .output}
+> > ~~~
+> > {: .language-r}
+> > 
+> > 
+> > 
+> > ~~~
+> > [1] "1"    "2"    "3"    "1"    "a"    "b"    "c"    "TRUE"
+> > ~~~
+> > {: .output}
 > {: .solution}
 {: .challenge}
 
 
-> ## Challenge:
->
-> In R, we call converting objects from one class into another class
-> _coercion_. These conversions happen according to a hierarchy,
-> whereby some types get preferentially coerced into other types. Can
-> you draw a diagram that represents the hierarchy of how these data
-> types are coerced?
-> > Solution
-> > logical &#8594; numeric &#8594; character &#8592; logical
-> {: .solution}
-{: .challenge}
 
 
 
@@ -902,7 +821,7 @@ test if any of the elements of a search vector are found:
 
 
 ~~~
-molecules <- c("dan", "rna", "protein", "peptide")
+molecules <- c("dna", "rna", "protein", "peptide")
 molecules[molecules == "rna" | molecules == "dna"] # returns both rna and dna
 ~~~
 {: .language-r}
@@ -910,7 +829,7 @@ molecules[molecules == "rna" | molecules == "dna"] # returns both rna and dna
 
 
 ~~~
-[1] "rna"
+[1] "dna" "rna"
 ~~~
 {: .output}
 
@@ -924,7 +843,7 @@ molecules %in% c("rna", "dna", "metabolite", "peptide", "glycerol")
 
 
 ~~~
-[1] FALSE  TRUE FALSE  TRUE
+[1]  TRUE  TRUE FALSE  TRUE
 ~~~
 {: .output}
 
@@ -938,7 +857,7 @@ molecules[molecules %in% c("rna", "dna", "metabolite", "peptide", "glycerol")]
 
 
 ~~~
-[1] "rna"     "peptide"
+[1] "dna"     "rna"     "peptide"
 ~~~
 {: .output}
 
@@ -946,7 +865,7 @@ molecules[molecules %in% c("rna", "dna", "metabolite", "peptide", "glycerol")]
 > ## Challenge:
 >
 > Can you figure out why `"four" > "five"` returns `TRUE`?
-> > Solution
+> > ## Solution
 > >
 > > 
 > > ~~~
@@ -1173,7 +1092,7 @@ heights[complete.cases(heights)]
 > 2. Use the function `median()` to calculate the median of the `heights` vector.
 > 3. Use R to figure out how many people in the set are taller than 67 inches.
 >
-> > Solution
+> > ## Solution
 > >
 > >~~~
 > >heights_no_na <- heights[!is.na(heights)]
@@ -1273,7 +1192,7 @@ There are similar constructors for characters and logicals, named
 >
 > What are the defaults for character and logical vectors?
 >
-> > Solution
+> > ## Solution
 > > 
 > > ~~~
 > > character(2) ## the empty charater
@@ -1362,7 +1281,7 @@ rep(c(1, 2, 3), 5)
 > obtain five 1s, five 2s and five 3s in that order? There are two
 > possibilities - see `?rep` or `?sort` for help.
 >
-> > Solution
+> > ## Solution
 > > 
 > > ~~~
 > > rep(c(1, 2, 3), each = 5)
@@ -1539,12 +1458,11 @@ sample(1:5, 10, replace = TRUE)
 > - Test this feature with your neighbour. First draw two random
 >   permutations of `1:10` independently and observe that you get
 >   different results.
->
 > - Now set the seed with, for example, `set.seed(123)` and repeat the
 >   random draw. Observe that you now get the same random draws.
->
 > - Repeat by setting a different seed.
-> > Solution
+>
+> > ## Solution
 > > Different permutations
 > >
 > > 
@@ -1645,7 +1563,7 @@ sample from a normal distribution. Two normal distributions of means 0
 and 100 and standard deviations 1 and 5, noted noted *N(0, 1)* and
 *N(100, 5)*, are shown below
 
-<img src="../fig/rmd-unnamed-chunk-61-1.png" title="Two normal distributions: *N(0, 1)* on the left and *N(100, 5)* on the right." alt="Two normal distributions: *N(0, 1)* on the left and *N(100, 5)* on the right." width="864" style="display: block; margin: auto;" />
+<img src="../fig/rmd-unnamed-chunk-60-1.png" title="Two normal distributions: *N(0, 1)* on the left and *N(100, 5)* on the right." alt="Two normal distributions: *N(0, 1)* on the left and *N(100, 5)* on the right." width="864" style="display: block; margin: auto;" />
 
 The three arguments, `n`, `mean` and `sd`, define the size of the
 sample, and the parameters of the normal distribution, i.e the mean

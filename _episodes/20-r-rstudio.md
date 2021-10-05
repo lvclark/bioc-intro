@@ -181,8 +181,8 @@ break. Go through the steps for creating an "R Project" for this
 tutorial below.
 
 1. Start RStudio.
-2. Under the `File` menu, click on `New project`. Choose `New directory`, then
-  `New project`.
+2. Under the `File` menu, click on `New Project`. Choose `New Directory`, then
+  `New Project`.
 3. Enter a name for this new folder (or "directory"), and choose a
    convenient location for it. This will be your **working directory**
    for this session (or whole course) (e.g., `wsbim1207`).
@@ -249,7 +249,7 @@ CSV files, and `fig_output/` folder for the figures that we will save.
 
 We are going to keep the script in the root of our working directory
 because we are only going to use one file and it will make things
-easier.
+easier. Under the `File` menu, click on `New File` then `R script`. This will open the 4th pane in the top left. Under the `File` menu again, click on `Save` and name the file "script.R".
 
 Your working directory should now look like this:
 
@@ -569,29 +569,28 @@ sessionInfo()
 
 
 ~~~
-R version 4.1.0 (2021-05-18)
-Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: Ubuntu 20.04.2 LTS
+R version 4.1.1 (2021-08-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19042)
 
 Matrix products: default
-BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
-LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
 
 locale:
- [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
- [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
- [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
-[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] knitr_1.33
+[1] knitr_1.36
 
 loaded via a namespace (and not attached):
-[1] compiler_4.1.0 magrittr_2.0.1 tools_4.1.0    stringi_1.7.3  highr_0.9     
-[6] stringr_1.4.0  xfun_0.24      evaluate_0.14 
+[1] compiler_4.1.1 magrittr_2.0.1 tools_4.1.1    stringi_1.7.4  highr_0.9     
+[6] stringr_1.4.0  xfun_0.26      evaluate_0.14 
 ~~~
 {: .output}
 
