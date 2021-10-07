@@ -56,6 +56,12 @@ The [website for ggplot2](https://ggplot2.tidyverse.org/) has a cheatsheet and
 other useful documentation.  This is a very popular R package, so Google and
 Stack Overflow are also very helpful for getting answers!
 
+Since we'll be doing a lot of multi-line commands, it's very easy to accidentally
+send an incomplete command to the console.  If you are trying to execute ggplot
+commands and nothing is happening, look at the prompt in the lower left.  If it
+is a `+` instead of a `>`, click to put your cursor down there and then hit the
+<kbd>Esc</kbd> key.
+
 ## Your first plots
 
 The base R installation has the `plot` function and some other functions
