@@ -519,6 +519,7 @@ retrieved.
 x <- c(1, 5, 3, 5, 10)
 names(x) ## no names
 names(x) <- c("A", "B", "C", "D", "E")
+x
 names(x) ## now we have names
 ```
 
