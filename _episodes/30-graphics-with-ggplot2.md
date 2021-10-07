@@ -47,13 +47,41 @@ head(rna)
 4    Klk6 GSM2545336        287 Mus musculus   8 Female InfluenzaA C57BL/6    8
 5   Fcrls GSM2545336         85 Mus musculus   8 Female InfluenzaA C57BL/6    8
 6  Slc2a4 GSM2545336        782 Mus musculus   8 Female InfluenzaA C57BL/6    8
-      tissue mouse
-1 Cerebellum    14
-2 Cerebellum    14
-3 Cerebellum    14
-4 Cerebellum    14
-5 Cerebellum    14
-6 Cerebellum    14
+      tissue mouse ENTREZID
+1 Cerebellum    14   109900
+2 Cerebellum    14    11815
+3 Cerebellum    14    56448
+4 Cerebellum    14    19144
+5 Cerebellum    14    80891
+6 Cerebellum    14    20528
+                                                                   product
+1                            argininosuccinate lyase transcript variant X1
+2                                    apolipoprotein D transcript variant 3
+3 cytochrome P450 family 2 subfamily d polypeptide 22 transcript variant 2
+4                      kallikrein related-peptidase 6 transcript variant 2
+5              Fc receptor-like S scavenger receptor transcript variant X1
+6       solute carrier family 2 (facilitated glucose transporter) member 4
+     ensembl_gene_id external_synonym chromosome_name   gene_biotype
+1 ENSMUSG00000025533    2510006M18Rik               5 protein_coding
+2 ENSMUSG00000022548             <NA>              16 protein_coding
+3 ENSMUSG00000061740             2D22              15 protein_coding
+4 ENSMUSG00000050063             Bssp               7 protein_coding
+5 ENSMUSG00000015852    2810439C17Rik               3 protein_coding
+6 ENSMUSG00000018566           Glut-4              11 protein_coding
+                            phenotype_description
+1           abnormal circulating amino acid level
+2                      abnormal lipid homeostasis
+3                        abnormal skin morphology
+4                         abnormal cytokine level
+5 decreased CD8-positive alpha-beta T cell number
+6              abnormal circulating glucose level
+  hsapiens_homolog_associated_gene_name
+1                                   ASL
+2                                  APOD
+3                                CYP2D6
+4                                  KLK6
+5                                 FCRL4
+6                                SLC2A4
 ~~~
 {: .output}
 
@@ -81,6 +109,12 @@ library(ggplot2)
 The [website for ggplot2](https://ggplot2.tidyverse.org/) has a cheatsheet and
 other useful documentation.  This is a very popular R package, so Google and
 Stack Overflow are also very helpful for getting answers!
+
+Since we'll be doing a lot of multi-line commands, it's very easy to accidentally
+send an incomplete command to the console.  If you are trying to execute ggplot
+commands and nothing is happening, look at the prompt in the lower left.  If it
+is a `+` instead of a `>`, click to put your cursor down there and then hit the
+<kbd>Esc</kbd> key.
 
 ## Your first plots
 
@@ -304,11 +338,14 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_wrap(~ tissue)
+  facet_wrap(~ sex)
 ~~~
 {: .language-r}
 
 <img src="../fig/rmd-ggfig140-1.png" title="plot of chunk ggfig140" alt="plot of chunk ggfig140" width="612" style="display: block; margin: auto;" />
+
+You can either use variables straight from your data frame, or create
+expressions in place, like `gene_biotype == "protein_coding"`.
 
 
 ~~~
@@ -317,11 +354,14 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue)
+  facet_grid(gene_biotype == "protein_coding" ~ sex)
 ~~~
 {: .language-r}
 
 <img src="../fig/rmd-ggfig150-1.png" title="plot of chunk ggfig150" alt="plot of chunk ggfig150" width="612" style="display: block; margin: auto;" />
+
+Now we can see that for non-coding mRNAs, the distribution of expression
+depends both on sex and infection status.
 
 ### Scales
 
@@ -338,7 +378,7 @@ ggplot(rna, aes(x = infection, y = expression)) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "Expression",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue) +
+  facet_grid(gene_biotype == "protein_coding" ~ sex) +
   scale_y_continuous(trans = "log1p",
                      breaks = c(0, 1e2, 1e3, 1e4, 1e5, 1e6))
 ~~~
@@ -367,7 +407,7 @@ ggplot(rna, aes(x = infection, y = expression)) +
 > >  geom_point(alpha = 0.01) +
 > >  labs(x = "Treatment", fill = "Treatment", y = "Expression",
 > >       title = "Gene expression vs. viral infection") +
-> >  facet_grid(sex ~ tissue) +
+> >  facet_grid(gene_biotype == "protein_coding" ~ sex) +
 > >  scale_y_continuous(trans = "log1p",
 > >                     breaks = c(0, 1e2, 1e3, 1e4, 1e5, 1e6)) +
 > >  scale_fill_manual(values = c(InfluenzaA = "darkolivegreen4",
@@ -392,7 +432,7 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue) +
+  facet_grid(gene_biotype == "protein_coding" ~ sex) +
   theme_bw()
 ~~~
 {: .language-r}
@@ -408,7 +448,7 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue) +
+  facet_grid(gene_biotype == "protein_coding" ~ sex) +
   theme(text = element_text(family = "serif"))
 ~~~
 {: .language-r}
@@ -424,7 +464,7 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue) +
+  facet_grid(gene_biotype == "protein_coding" ~ sex) +
   theme(text = element_text(family = "serif"),
         axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ~~~
@@ -446,7 +486,7 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue) +
+  facet_grid(gene_biotype == "protein_coding" ~ sex) +
   coord_flip()
 ~~~
 {: .language-r}
@@ -533,7 +573,7 @@ ggplot(rna[rna$gene == "Swt1",], aes(x = infection, y = log1p(expression))) +
   geom_point() +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue)
+  facet_grid(gene_biotype == "protein_coding" ~ sex)
 ~~~
 {: .language-r}
 
@@ -588,7 +628,7 @@ rna %>%
   geom_point() +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue)
+  facet_grid(gene_biotype == "protein_coding" ~ sex)
 ~~~
 {: .language-r}
 
@@ -618,7 +658,7 @@ head(rna_wider)
 
 
 ~~~
-# A tibble: 6 x 46
+# A tibble: 6 x 23
   gene    GSM2545336 GSM2545337 GSM2545338 GSM2545339 GSM2545340 GSM2545341
   <chr>        <int>      <int>      <int>      <int>      <int>      <int>
 1 Asl           1170        361        400        586        626        988
@@ -627,13 +667,11 @@ head(rna_wider)
 4 Klk6           287        629        641        578        448        195
 5 Fcrls           85        233        244        237        180         38
 6 Slc2a4         782        231        248        265        313        786
-# ... with 39 more variables: GSM2545342 <int>, GSM2545343 <int>,
+# ... with 16 more variables: GSM2545342 <int>, GSM2545343 <int>,
 #   GSM2545344 <int>, GSM2545345 <int>, GSM2545346 <int>, GSM2545347 <int>,
 #   GSM2545348 <int>, GSM2545349 <int>, GSM2545350 <int>, GSM2545351 <int>,
-#   GSM2545352 <int>, GSM2545353 <int>, GSM2545354 <int>, GSM2545355 <int>,
-#   GSM2545356 <int>, GSM2545357 <int>, GSM2545358 <int>, GSM2545359 <int>,
-#   GSM2545360 <int>, GSM2545361 <int>, GSM2545362 <int>, GSM2545363 <int>,
-#   GSM2545364 <int>, GSM2545365 <int>, GSM2545366 <int>, GSM2545367 <int>, ...
+#   GSM2545352 <int>, GSM2545353 <int>, GSM2545354 <int>, GSM2545362 <int>,
+#   GSM2545363 <int>, GSM2545380 <int>
 ~~~
 {: .output}
 
@@ -699,11 +737,65 @@ head(metadata)
 ~~~
          sample    sex   infection time     tissue mouse
 1    GSM2545336 Female  InfluenzaA    8 Cerebellum    14
-1478 GSM2545337 Female NonInfected    0 Cerebellum     9
-2955 GSM2545338 Female NonInfected    0 Cerebellum    10
-4432 GSM2545339 Female  InfluenzaA    4 Cerebellum    15
-5909 GSM2545340   Male  InfluenzaA    4 Cerebellum    18
-7386 GSM2545341   Male  InfluenzaA    8 Cerebellum     6
+1475 GSM2545337 Female NonInfected    0 Cerebellum     9
+2949 GSM2545338 Female NonInfected    0 Cerebellum    10
+4423 GSM2545339 Female  InfluenzaA    4 Cerebellum    15
+5897 GSM2545340   Male  InfluenzaA    4 Cerebellum    18
+7371 GSM2545341   Male  InfluenzaA    8 Cerebellum     6
+~~~
+{: .output}
+
+I'll also build a table of gene metadata, which you would have hypothetically
+imported from another spreadsheet.
+
+
+~~~
+genes <- rna[,c("gene", "ENTREZID", "product", "ensembl_gene_id",
+                "chromosome_name", "gene_biotype", "phenotype_description",
+                "hsapiens_homolog_associated_gene_name")]
+genes <- genes[!duplicated(genes),]
+head(genes)
+~~~
+{: .language-r}
+
+
+
+~~~
+     gene ENTREZID
+1     Asl   109900
+2    Apod    11815
+3 Cyp2d22    56448
+4    Klk6    19144
+5   Fcrls    80891
+6  Slc2a4    20528
+                                                                   product
+1                            argininosuccinate lyase transcript variant X1
+2                                    apolipoprotein D transcript variant 3
+3 cytochrome P450 family 2 subfamily d polypeptide 22 transcript variant 2
+4                      kallikrein related-peptidase 6 transcript variant 2
+5              Fc receptor-like S scavenger receptor transcript variant X1
+6       solute carrier family 2 (facilitated glucose transporter) member 4
+     ensembl_gene_id chromosome_name   gene_biotype
+1 ENSMUSG00000025533               5 protein_coding
+2 ENSMUSG00000022548              16 protein_coding
+3 ENSMUSG00000061740              15 protein_coding
+4 ENSMUSG00000050063               7 protein_coding
+5 ENSMUSG00000015852               3 protein_coding
+6 ENSMUSG00000018566              11 protein_coding
+                            phenotype_description
+1           abnormal circulating amino acid level
+2                      abnormal lipid homeostasis
+3                        abnormal skin morphology
+4                         abnormal cytokine level
+5 decreased CD8-positive alpha-beta T cell number
+6              abnormal circulating glucose level
+  hsapiens_homolog_associated_gene_name
+1                                   ASL
+2                                  APOD
+3                                CYP2D6
+4                                  KLK6
+5                                 FCRL4
+6                                SLC2A4
 ~~~
 {: .output}
 
@@ -713,6 +805,7 @@ dataset.
 
 ~~~
 rna_orig <- left_join(rna_longer, metadata, by = "sample")
+rna_orig <- left_join(rna_orig, genes, by = "gene")
 head(rna_orig)
 ~~~
 {: .language-r}
@@ -720,15 +813,18 @@ head(rna_orig)
 
 
 ~~~
-# A tibble: 6 x 8
-  gene  sample     expression sex    infection    time tissue     mouse
-  <chr> <chr>           <int> <chr>  <chr>       <int> <chr>      <int>
-1 Asl   GSM2545336       1170 Female InfluenzaA      8 Cerebellum    14
-2 Asl   GSM2545337        361 Female NonInfected     0 Cerebellum     9
-3 Asl   GSM2545338        400 Female NonInfected     0 Cerebellum    10
-4 Asl   GSM2545339        586 Female InfluenzaA      4 Cerebellum    15
-5 Asl   GSM2545340        626 Male   InfluenzaA      4 Cerebellum    18
-6 Asl   GSM2545341        988 Male   InfluenzaA      8 Cerebellum     6
+# A tibble: 6 x 15
+  gene  sample     expression sex    infection  time tissue mouse ENTREZID product
+  <chr> <chr>           <int> <chr>  <chr>     <int> <chr>  <int>    <int> <chr>  
+1 Asl   GSM2545336       1170 Female Influenz~     8 Cereb~    14   109900 argini~
+2 Asl   GSM2545337        361 Female NonInfec~     0 Cereb~     9   109900 argini~
+3 Asl   GSM2545338        400 Female NonInfec~     0 Cereb~    10   109900 argini~
+4 Asl   GSM2545339        586 Female Influenz~     4 Cereb~    15   109900 argini~
+5 Asl   GSM2545340        626 Male   Influenz~     4 Cereb~    18   109900 argini~
+6 Asl   GSM2545341        988 Male   Influenz~     8 Cereb~     6   109900 argini~
+# ... with 5 more variables: ensembl_gene_id <chr>, chromosome_name <chr>,
+#   gene_biotype <chr>, phenotype_description <chr>,
+#   hsapiens_homolog_associated_gene_name <chr>
 ~~~
 {: .output}
 
@@ -740,7 +836,7 @@ ggplot(rna_orig, aes(x = infection, y = log1p(expression))) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue)
+  facet_grid(gene_biotype == "protein_coding" ~ sex)
 ~~~
 {: .language-r}
 
