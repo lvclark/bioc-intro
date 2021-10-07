@@ -453,6 +453,67 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
 
 <img src="../fig/rmd-ggfig210-1.png" title="plot of chunk ggfig210" alt="plot of chunk ggfig210" width="612" style="display: block; margin: auto;" />
 
+## Saving your plots
+
+If you using RStudio to draw your plots in the lower right pane, you probably
+have a button you can click to export the plot to a file.  However, this button
+has limited options and is unlikely to produce publication-quality plots.  You
+can instead use the `ggsave` function to save the last plot to a file.  This
+function only works for plots generated with ggplot2, not base R plots.
+
+Before saving your plots, make a folder called "fig" within your current working
+directory.
+
+
+~~~
+ggsave("fig/my_figure.pdf", width = 7, height = 5, units = "in")
+~~~
+{: .language-r}
+
+Once you run that command, you'll see the file.
+
+Alternatively, your base R installation came with a package called grDevices
+that has functions to save all kinds of plots, not just those generated with
+ggplot.  For example, if you look at `?pdf` or `?tiff` you'll see different
+functions for generating different file types.  You'll see more options, for
+example I like to use LZW compression on tiffs to reduce file size without
+any loss of quality. With these functions, you always need
+to use the `dev.off()` function to close the file when you are done plotting.
+
+
+~~~
+tiff("fig/my_boxplot.tiff", width = 7 * 300, height = 5 * 300, res = 300,
+     compression = "lzw")
+
+plot(x = as.factor(rna$infection), y = log1p(rna$expression))
+
+dev.off()
+~~~
+{: .language-r}
+
+If you make multiple plots within a PDF, it will put them on separate pages.
+
+
+~~~
+pdf("fig/some_plots.pdf", width = 6, height = 9)
+
+plot(x = as.factor(rna$infection), y = log1p(rna$expression))
+
+ggplot(rna, aes(x = infection, y = log1p(expression))) +
+  geom_violin(mapping = aes(fill = infection)) +
+  geom_point(alpha = 0.01)
+
+dev.off()
+~~~
+{: .language-r}
+
+> ## Cairo graphics
+> 
+> If you use the `pdf` function and you don't like something about the output,
+> for example special characters not printing correctly, try `cairo_pdf`.
+> It uses a different plotting engine and can give slightly different results.
+{: .callout}
+
 ## Using other tidyverse packages with ggplot2
 
 The tidyverse is a group of R packages that are designed to work together to make
