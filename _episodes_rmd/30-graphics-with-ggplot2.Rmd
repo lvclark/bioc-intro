@@ -499,7 +499,7 @@ metadata table here from the original, although you could have hypothetically
 imported such metadata from a CSV.
 
 ```{r, eval = TRUE}
-metadata <- rna[,c("sample", "sex", "infection", "time", "tissue", "mouse")]
+metadata <- rna[,c("sample", "sex", "infection", "time", "tissue", "mouse", "gene_biotype")]
 metadata <- metadata[!duplicated(metadata),]
 head(metadata)
 ```
