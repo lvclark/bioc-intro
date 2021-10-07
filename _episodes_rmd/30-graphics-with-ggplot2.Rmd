@@ -499,9 +499,20 @@ metadata table here from the original, although you could have hypothetically
 imported such metadata from a CSV.
 
 ```{r, eval = TRUE}
-metadata <- rna[,c("sample", "sex", "infection", "time", "tissue", "mouse", "gene_biotype")]
+metadata <- rna[,c("sample", "sex", "infection", "time", "tissue", "mouse")]
 metadata <- metadata[!duplicated(metadata),]
 head(metadata)
+```
+
+I'll also build a table of gene metadata, which you would have hypothetically
+imported from another spreadsheet.
+
+```{r, eval = TRUE}
+genes <- rna[,c("gene", "ENTREZID", "product", "ensembl_gene_id",
+                "chromosome_name", "gene_biotype", "phenotype_description",
+                "hsapiens_homolog_associated_gene_name")]
+genes <- genes[!duplicated(genes),]
+head(genes)
 ```
 
 We could then use `left_join` from the `dplyr` package to recreate the original
@@ -509,6 +520,7 @@ dataset.
 
 ```{r ggfig250, eval = TRUE}
 rna_orig <- left_join(rna_longer, metadata, by = "sample")
+rna_orig <- left_join(rna_orig, genes, by = "gene")
 head(rna_orig)
 
 ggplot(rna_orig, aes(x = infection, y = log1p(expression))) +
