@@ -231,8 +231,11 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_wrap(~ tissue)
+  facet_wrap(~ sex)
 ```
+
+You can either use variables straight from your data frame, or create
+expressions in place, like `gene_biotype == "protein_coding"`.
 
 ```{r ggfig150, eval = TRUE}
 ggplot(rna, aes(x = infection, y = log1p(expression))) +
@@ -240,8 +243,11 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue)
+  facet_grid(gene_biotype == "protein_coding" ~ sex)
 ```
+
+Now we can see that for non-coding mRNAs, the distribution of expression
+depends both on sex and infection status.
 
 ### Scales
 
@@ -257,7 +263,7 @@ ggplot(rna, aes(x = infection, y = expression)) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "Expression",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue) +
+  facet_grid(gene_biotype == "protein_coding" ~ sex) +
   scale_y_continuous(trans = "log1p",
                      breaks = c(0, 1e2, 1e3, 1e4, 1e5, 1e6))
 ```
@@ -282,7 +288,7 @@ ggplot(rna, aes(x = infection, y = expression)) +
 > >  geom_point(alpha = 0.01) +
 > >  labs(x = "Treatment", fill = "Treatment", y = "Expression",
 > >       title = "Gene expression vs. viral infection") +
-> >  facet_grid(sex ~ tissue) +
+> >  facet_grid(gene_biotype == "protein_coding" ~ sex) +
 > >  scale_y_continuous(trans = "log1p",
 > >                     breaks = c(0, 1e2, 1e3, 1e4, 1e5, 1e6)) +
 > >  scale_fill_manual(values = c(InfluenzaA = "darkolivegreen4",
@@ -303,7 +309,7 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue) +
+  facet_grid(gene_biotype == "protein_coding" ~ sex) +
   theme_bw()
 ```
 
@@ -315,7 +321,7 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue) +
+  facet_grid(gene_biotype == "protein_coding" ~ sex) +
   theme(text = element_text(family = "serif"))
 ```
 
@@ -327,7 +333,7 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue) +
+  facet_grid(gene_biotype == "protein_coding" ~ sex) +
   theme(text = element_text(family = "serif"),
         axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 ```
@@ -345,7 +351,7 @@ ggplot(rna, aes(x = infection, y = log1p(expression))) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue) +
+  facet_grid(gene_biotype == "protein_coding" ~ sex) +
   coord_flip()
 ```
 
@@ -422,7 +428,7 @@ ggplot(rna[rna$gene == "Swt1",], aes(x = infection, y = log1p(expression))) +
   geom_point() +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue)
+  facet_grid(gene_biotype == "protein_coding" ~ sex)
 ```
 
 The [dplyr](https://dplyr.tidyverse.org/) package has a lot of functions for
@@ -442,7 +448,7 @@ rna %>%
   geom_point() +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue)
+  facet_grid(gene_biotype == "protein_coding" ~ sex)
 ```
 
 ### tidyr
@@ -510,6 +516,6 @@ ggplot(rna_orig, aes(x = infection, y = log1p(expression))) +
   geom_point(alpha = 0.01) +
   labs(x = "Treatment", fill = "Treatment", y = "logCPM",
        title = "Gene expression vs. viral infection") +
-  facet_grid(sex ~ tissue)
+  facet_grid(gene_biotype == "protein_coding" ~ sex)
 ```
 
