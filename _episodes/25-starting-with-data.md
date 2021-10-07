@@ -251,14 +251,13 @@ objects besides `data.frame`.
 >
 > - What is the class of the object `rna`?
 > - How many rows and how many columns are in this object?
-> - How many genes (as defined by the `gene` variable) have been
->   measured in this experiment?
+> - How many columns contain integer data?
 >
 > > ## Solution
 > >
 > > - class: data frame
 > > - how many rows: 66465, how many columns: 11
-> > - how many genes: 1477
+> > - how many integer columns: 5 (expression, age, time, mouse, ENTREZID)
 > {: .solution}
 {: .challenge}
 
@@ -977,9 +976,9 @@ str(l)
 List of 5
  $ : int [1:10] 1 2 3 4 5 6 7 8 9 10
  $ : chr [1:26] "a" "b" "c" "d" ...
- $ : chr [1:196, 1:16] "ade4" "adegenet" "AnnotationDbi" "ape" ...
+ $ : chr [1:209, 1:16] "ade4" "adegenet" "AnnotationDbi" "ape" ...
   ..- attr(*, "dimnames")=List of 2
-  .. ..$ : chr [1:196] "ade4" "adegenet" "AnnotationDbi" "ape" ...
+  .. ..$ : chr [1:209] "ade4" "adegenet" "AnnotationDbi" "ape" ...
   .. ..$ : chr [1:16] "Package" "LibPath" "Version" "Priority" ...
  $ :'data.frame':	50 obs. of  2 variables:
   ..$ speed: num [1:50] 4 4 7 7 8 9 10 10 10 11 ...
