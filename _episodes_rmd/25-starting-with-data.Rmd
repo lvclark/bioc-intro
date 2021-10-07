@@ -121,12 +121,16 @@ with the separation argument as `,`. The code is as follows:
 ```{r, eval = TRUE}
 rna <- read.table(file = "data/rnaseq.csv",
                   sep = ",",
-                  header = TRUE)
+                  header = TRUE,
+                  quote = "\"")
 ```
 
 The header argument has to be set to TRUE to be able to read the
 headers as by default `read.table()` has the header argument set to
-FALSE.
+FALSE.  The quote argument was also set so that only double quotes,
+not single quotes, would be used to mark strings containing a comma,
+since some gene annotations contain the single quote for indicating
+3-prime or 5-prime.
 
 ## What are data frames?
 
