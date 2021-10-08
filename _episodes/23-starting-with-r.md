@@ -554,12 +554,12 @@ important ones are lists (`list`), matrices (`matrix`), data frames
 > We've seen that atomic vectors can be of type character, numeric (or
 > double), integer, and logical. But what happens if we try to mix
 > these types in a single vector? Try each of these examples (hint: use
-> `class()` tocheck the data type of your objects):
+> `class()` to check the data type of your objects):
 >
 > 
 > ~~~
 > num_char <- c(1, 2, 3, "a")
-> num_logical <- c(1, 2, 3, TRUE)
+> num_logical <- c(1, 2, 3, TRUE, FALSE)
 > char_logical <- c("a", "b", "c", TRUE)
 > tricky <- c(1, 2, 3, "4")
 > ~~~
