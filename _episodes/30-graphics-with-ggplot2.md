@@ -120,7 +120,8 @@ is a `+` instead of a `>`, click to put your cursor down there and then hit the
 
 The base R installation has the `plot` function and some other functions
 for generating plots.  You can make a scatter plot or box plot pretty
-quickly this way, but it might not look very nice.
+quickly this way, but it might not look very nice.  Remember that `$` extracts
+one column from a data frame and returns it as a vector.
 
 > ## Data transformation
 > 
@@ -396,9 +397,17 @@ ggplot(rna, aes(x = infection, y = expression)) +
 > If you have extra time, you can play around with color names from
 > [this list](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf).
 > You can also use a [color picker](https://www.w3schools.com/colors/colors_picker.asp)
-> to generate custom color strings like `#4d94ff`
+> to generate custom color strings like `"#4d94ff"`.  Lastly, you can Google your
+> university name and "hex colors" to get your official school colors
+> (also as the `#` character followed by six numbers and letters).
+>
+> **Hint**: Regardless of which colors you use, you will need to use the `c()`
+> command to create a character vector of colors.  Color names always need to be
+> in quotes.
 >
 > > ## Solution
+> >
+> > The `values` argument to `scale_fill_manual` tells it what colors to use.
 > >
 > > 
 > > ~~~
@@ -410,8 +419,32 @@ ggplot(rna, aes(x = infection, y = expression)) +
 > >  facet_grid(gene_biotype == "protein_coding" ~ sex) +
 > >  scale_y_continuous(trans = "log1p",
 > >                     breaks = c(0, 1e2, 1e3, 1e4, 1e5, 1e6)) +
-> >  scale_fill_manual(values = c(InfluenzaA = "darkolivegreen4",
-> >                               NonInfected = "royalblue"))
+> >  scale_fill_manual(values = c("darkolivegreen4",
+> >                               "royalblue"))
+> > ~~~
+> > {: .language-r}
+> > 
+> > <img src="../fig/rmd-ggfig165-1.png" title="plot of chunk ggfig165" alt="plot of chunk ggfig165" width="612" style="display: block; margin: auto;" />
+> >
+> > I often like to build a color key vector that I can reuse for all my plots.
+> > It not only saves me some typing, but it makes it easy to change the colors
+> > later!  The vector can be named in order to be explicit about which colors
+> > go with which values.
+> >
+> > 
+> > ~~~
+> > mycolorkey <- c("InfluenzaA" = "darkolivegreen4",
+> >                 "NonInfected" = "royalblue")
+> > 
+> > ggplot(rna, aes(x = infection, y = expression)) +
+> >  geom_violin(mapping = aes(fill = infection)) +
+> >  geom_point(alpha = 0.01) +
+> >  labs(x = "Treatment", fill = "Treatment", y = "Expression",
+> >       title = "Gene expression vs. viral infection") +
+> >  facet_grid(gene_biotype == "protein_coding" ~ sex) +
+> >  scale_y_continuous(trans = "log1p",
+> >                     breaks = c(0, 1e2, 1e3, 1e4, 1e5, 1e6)) +
+> >  scale_fill_manual(values = mycolorkey)
 > > ~~~
 > > {: .language-r}
 > > 
@@ -422,7 +455,7 @@ ggplot(rna, aes(x = infection, y = expression)) +
 ### Themes
 
 If you want to change something like grid lines or the angle of axis tick labels,
-you probably want to add a `theme` command.  There are some pre-build themes, for
+you probably want to add a `theme` command.  There are some pre-built themes, for
 example:
 
 
@@ -501,12 +534,12 @@ has limited options and is unlikely to produce publication-quality plots.  You
 can instead use the `ggsave` function to save the last plot to a file.  This
 function only works for plots generated with ggplot2, not base R plots.
 
-Before saving your plots, make a folder called "fig" within your current working
-directory.
+Before saving your plots, make a folder called "fig_output" within your current
+working directory.
 
 
 ~~~
-ggsave("fig/my_figure.pdf", width = 7, height = 5, units = "in")
+ggsave("fig_output/my_figure.pdf", width = 7, height = 5, units = "in")
 ~~~
 {: .language-r}
 
@@ -522,7 +555,7 @@ to use the `dev.off()` function to close the file when you are done plotting.
 
 
 ~~~
-tiff("fig/my_boxplot.tiff", width = 7 * 300, height = 5 * 300, res = 300,
+tiff("fig_output/my_boxplot.tiff", width = 7 * 300, height = 5 * 300, res = 300,
      compression = "lzw")
 
 plot(x = as.factor(rna$infection), y = log1p(rna$expression))
@@ -535,7 +568,7 @@ If you make multiple plots within a PDF, it will put them on separate pages.
 
 
 ~~~
-pdf("fig/some_plots.pdf", width = 6, height = 9)
+pdf("fig_output/some_plots.pdf", width = 6, height = 9)
 
 plot(x = as.factor(rna$infection), y = log1p(rna$expression))
 
