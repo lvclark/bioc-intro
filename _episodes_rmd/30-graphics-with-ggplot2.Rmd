@@ -392,11 +392,11 @@ has limited options and is unlikely to produce publication-quality plots.  You
 can instead use the `ggsave` function to save the last plot to a file.  This
 function only works for plots generated with ggplot2, not base R plots.
 
-Before saving your plots, make a folder called "fig" within your current working
-directory.
+Before saving your plots, make a folder called "fig_output" within your current
+working directory.
 
 ```{r eval = FALSE}
-ggsave("fig/my_figure.pdf", width = 7, height = 5, units = "in")
+ggsave("fig_output/my_figure.pdf", width = 7, height = 5, units = "in")
 ```
 
 Once you run that command, you'll see the file.
@@ -410,7 +410,7 @@ any loss of quality. With these functions, you always need
 to use the `dev.off()` function to close the file when you are done plotting.
 
 ```{r eval = FALSE}
-tiff("fig/my_boxplot.tiff", width = 7 * 300, height = 5 * 300, res = 300,
+tiff("fig_output/my_boxplot.tiff", width = 7 * 300, height = 5 * 300, res = 300,
      compression = "lzw")
 
 plot(x = as.factor(rna$infection), y = log1p(rna$expression))
@@ -421,7 +421,7 @@ dev.off()
 If you make multiple plots within a PDF, it will put them on separate pages.
 
 ```{r eval = FALSE}
-pdf("fig/some_plots.pdf", width = 6, height = 9)
+pdf("fig_output/some_plots.pdf", width = 6, height = 9)
 
 plot(x = as.factor(rna$infection), y = log1p(rna$expression))
 
