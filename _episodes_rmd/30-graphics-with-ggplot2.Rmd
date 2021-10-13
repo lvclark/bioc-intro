@@ -329,7 +329,7 @@ ggplot(rna, aes(x = infection, y = expression)) +
 ### Themes
 
 If you want to change something like grid lines or the angle of axis tick labels,
-you probably want to add a `theme` command.  There are some pre-build themes, for
+you probably want to add a `theme` command.  There are some pre-built themes, for
 example:
 
 ```{r ggfig180, eval = TRUE}
