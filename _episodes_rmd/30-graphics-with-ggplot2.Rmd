@@ -278,11 +278,19 @@ ggplot(rna, aes(x = infection, y = expression)) +
 > If you have extra time, you can play around with color names from
 > [this list](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf).
 > You can also use a [color picker](https://www.w3schools.com/colors/colors_picker.asp)
-> to generate custom color strings like `#4d94ff`
+> to generate custom color strings like `"#4d94ff"`.  Lastly, you can Google your
+> university name and "hex colors" to get your official school colors
+> (also as the `#` character followed by six numbers and letters).
+>
+> **Hint**: Regardless of which colors you use, you will need to use the `c()`
+> command to create a character vector of colors.  Color names always need to be
+> in quotes.
 >
 > > ## Solution
 > >
-> > ```{r ggfig170, eval = TRUE}
+> > The `values` argument to `scale_fill_manual` tells it what colors to use.
+> >
+> > ```{r ggfig165, eval = TRUE}
 > > ggplot(rna, aes(x = infection, y = expression)) +
 > >  geom_violin(mapping = aes(fill = infection)) +
 > >  geom_point(alpha = 0.01) +
@@ -291,8 +299,28 @@ ggplot(rna, aes(x = infection, y = expression)) +
 > >  facet_grid(gene_biotype == "protein_coding" ~ sex) +
 > >  scale_y_continuous(trans = "log1p",
 > >                     breaks = c(0, 1e2, 1e3, 1e4, 1e5, 1e6)) +
-> >  scale_fill_manual(values = c(InfluenzaA = "darkolivegreen4",
-> >                               NonInfected = "royalblue"))
+> >  scale_fill_manual(values = c("darkolivegreen4",
+> >                               "royalblue"))
+> > ```
+> >
+> > I often like to build a color key vector that I can reuse for all my plots.
+> > It not only saves me some typing, but it makes it easy to change the colors
+> > later!  The vector can be named in order to be explicit about which colors
+> > go with which values.
+> >
+> > ```{r ggfig170, eval = TRUE}
+> > mycolorkey <- c("InfluenzaA" = "darkolivegreen4",
+> >                 "NonInfected" = "royalblue")
+> >
+> > ggplot(rna, aes(x = infection, y = expression)) +
+> >  geom_violin(mapping = aes(fill = infection)) +
+> >  geom_point(alpha = 0.01) +
+> >  labs(x = "Treatment", fill = "Treatment", y = "Expression",
+> >       title = "Gene expression vs. viral infection") +
+> >  facet_grid(gene_biotype == "protein_coding" ~ sex) +
+> >  scale_y_continuous(trans = "log1p",
+> >                     breaks = c(0, 1e2, 1e3, 1e4, 1e5, 1e6)) +
+> >  scale_fill_manual(values = mycolorkey)
 > > ```
 > {: .solution}
 {: .challenge}
